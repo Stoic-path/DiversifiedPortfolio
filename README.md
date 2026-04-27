@@ -55,8 +55,8 @@ La función objetivo wᵀΣw es cuadrática (programación cuadrática), convexa
 
 1. Clonar el repositorio:
 
-       git clone git@github.com:USUARIO/portfolio-optimizer.git
-       cd portfolio-optimizer
+       git clone git@github.com:Stoic-path/DiversifiedPortfolio.git
+       cd DiversifiedPortfolio
 
 2. Crear y activar entorno virtual:
 
