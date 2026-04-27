@@ -1,0 +1,19 @@
+# ===== Datos =====
+yfinance>=0.2.40
+pandas>=2.0.0
+numpy>=1.24.0
+
+# ===== Optimización =====
+PyPortfolioOpt>=1.5.5
+scipy>=1.11.0
+cvxpy>=1.4.0
+
+# ===== Visualización =====
+plotly>=5.18.0
+matplotlib>=3.8.0
+
+# ===== App interactiva =====
+streamlit>=1.30.0
+
+# ===== Utilidades =====
+python-dateutil>=2.8.0

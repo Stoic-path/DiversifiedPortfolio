@@ -1,0 +1,56 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribución / paquetes
+build/
+dist/
+*.egg-info/
+*.egg
+
+# ===== Entornos virtuales =====
+venv/
+env/
+.venv/
+ENV/
+
+# ===== Variables de entorno y secretos =====
+.env
+.env.local
+*.pem
+*.key
+
+# ===== Datos descargados =====
+data/*.csv
+data/*.parquet
+data/cache/
+!data/.gitkeep
+
+# ===== Jupyter Notebooks =====
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ===== VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== Streamlit =====
+.streamlit/secrets.toml
+
+# ===== Sistema operativo =====
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS (por si tus compañeros usan Mac)
+.DS_Store
+._*
+
+# ===== Logs y archivos temporales =====
+*.log
+*.tmp
+*.bak
