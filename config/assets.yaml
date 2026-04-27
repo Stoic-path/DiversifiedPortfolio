@@ -1,0 +1,69 @@
+# =============================================================================
+# Universo de activos para el optimizador de portafolio
+# =============================================================================
+# Este archivo define los candidatos que el optimizador puede seleccionar.
+# El modelo de Markowitz extendido decide automáticamente cuáles entran al
+# portafolio óptimo (peso > 0) sujeto a las restricciones definidas en el
+# CLAUDE.md (criptos <= 33%, commodities <= 33%, peso individual <= 25%).
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Acciones del S&P 500, agrupadas por sector para diversificación.
+# Yahoo Finance entrega solo días hábiles (~252/año).
+# -----------------------------------------------------------------------------
+stocks:
+  # Tech
+  - AAPL    # Apple
+  - MSFT    # Microsoft
+  - GOOGL   # Alphabet (Google)
+  - NVDA    # NVIDIA
+  - META    # Meta Platforms
+
+  # Salud
+  - JNJ     # Johnson & Johnson
+  - UNH     # UnitedHealth Group
+  - PFE     # Pfizer
+
+  # Finanzas
+  - JPM     # JPMorgan Chase
+  - BAC     # Bank of America
+  - V       # Visa
+
+  # Consumo
+  - AMZN    # Amazon
+  - WMT     # Walmart
+  - KO      # Coca-Cola
+  - PG      # Procter & Gamble
+
+  # Energía
+  - XOM     # ExxonMobil
+  - CVX     # Chevron
+
+# -----------------------------------------------------------------------------
+# Criptomonedas (top 10 por capitalización de mercado).
+# Cotizan los 7 días de la semana, por eso al cruzarlas con stocks se pierden
+# fines de semana al hacer el inner join por fecha.
+# -----------------------------------------------------------------------------
+cryptos:
+  - BTC-USD    # Bitcoin
+  - ETH-USD    # Ethereum
+  - SOL-USD    # Solana
+  - BNB-USD    # Binance Coin
+  - XRP-USD    # XRP (Ripple)
+  - ADA-USD    # Cardano
+  - AVAX-USD   # Avalanche
+  - DOT-USD    # Polkadot
+  - MATIC-USD  # Polygon
+  - LINK-USD   # Chainlink
+
+# -----------------------------------------------------------------------------
+# Commodities, accedidas vía ETFs disponibles en Yahoo Finance.
+# Los ETFs cotizan en bolsa, por eso siguen el calendario de días hábiles.
+# -----------------------------------------------------------------------------
+commodities:
+  - GLD    # Oro
+  - SLV    # Plata
+  - USO    # Petróleo (WTI)
+  - UNG    # Gas natural
+  - DBA    # Agricultura (cesta diversificada)
+  - CPER   # Cobre
