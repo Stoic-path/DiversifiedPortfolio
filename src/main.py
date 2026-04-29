@@ -27,6 +27,14 @@ def main():
     print(f"\nOptimizando portafolio (Entrenamiento hasta {split_date})...")
     ef = build_problem(mu, sigma, universe)
     weights = solve(ef, method="max_sharpe")
+
+    # Líneas de prueba a insertar en src/main.py justo después de 'weights = solve(...)'
+    from kkt_analysis import extract_multipliers, interpret
+    print("\n--- Análisis KKT ---")
+    multiplicadores = extract_multipliers(ef)
+    interpretaciones = interpret(multiplicadores)
+    for texto in interpretaciones:
+        print(texto)
     
     print("\nPesos Óptimos Calculados:")
     for ticker, weight in weights.items():
