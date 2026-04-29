@@ -85,33 +85,52 @@ def load_universe() -> dict[str, list[str]]:
 # =============================================================================
 # Descarga de precios con caché incremental
 # =============================================================================
-def _download_yf(tickers: list[str], start: str | None, period: str | None) -> pd.DataFrame:
+def _period_to_start_date(period: str, reference: date | None = None) -> date:
+    """
+    Convierte un período tipo yfinance ("1y", "5y", "max") a fecha de inicio.
+
+    Se hace localmente en vez de delegar en el parámetro ``period`` de yfinance
+    porque, dependiendo del estado de su caché interna, ``period`` puede
+    devolver una ventana que no llega hasta la fecha actual. Pasar siempre
+    ``start`` y ``end`` explícitos es más predecible.
+    """
+    if reference is None:
+        reference = date.today()
+    period = period.strip().lower()
+    if period == "max":
+        return date(1990, 1, 1)
+    if period.endswith("y"):
+        years = int(period[:-1])
+        return reference - timedelta(days=years * 365)
+    if period.endswith("mo"):
+        months = int(period[:-2])
+        return reference - timedelta(days=months * 30)
+    if period.endswith("d"):
+        days = int(period[:-1])
+        return reference - timedelta(days=days)
+    raise ValueError(f"Período no soportado: {period!r}")
+
+
+def _download_yf(tickers: list[str], start: str, end: str | None = None) -> pd.DataFrame:
     """
     Wrapper sobre yfinance que devuelve precios de cierre ajustados.
 
     Maneja la diferencia de forma del DataFrame que devuelve yfinance al pedir
     1 vs N tickers, y emite un warning si algún ticker no devolvió datos.
+    El parámetro ``end`` es exclusivo en yfinance, por eso se le suma un día
+    al construir la llamada para incluir la fecha actual si hay datos.
     """
     # auto_adjust=True hace que la columna 'Close' ya venga ajustada por
     # splits/dividendos; es lo correcto para cálculo de retornos.
-    if start is not None:
-        raw = yf.download(
-            tickers=tickers,
-            start=start,
-            interval="1d",
-            auto_adjust=True,
-            progress=False,
-            group_by="column",
-        )
-    else:
-        raw = yf.download(
-            tickers=tickers,
-            period=period,
-            interval="1d",
-            auto_adjust=True,
-            progress=False,
-            group_by="column",
-        )
+    raw = yf.download(
+        tickers=tickers,
+        start=start,
+        end=end,
+        interval="1d",
+        auto_adjust=True,
+        progress=False,
+        group_by="column",
+    )
 
     if raw is None or raw.empty:
         warnings.warn(
@@ -197,9 +216,15 @@ def download_prices(
     """
     _DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+    today = date.today()
+    # end es exclusivo en yfinance: sumamos 1 día para incluir la fecha más
+    # reciente disponible (típicamente el cierre de ayer hasta media tarde).
+    end_str = (today + timedelta(days=1)).isoformat()
+    full_start_str = _period_to_start_date(period, today).isoformat()
+
     # Caso 1: forzar descarga completa.
     if force:
-        prices = _download_yf(tickers, start=None, period=period)
+        prices = _download_yf(tickers, start=full_start_str, end=end_str)
         prices = prices.dropna(how="any")
         prices.to_csv(_CACHE_PATH)
         return prices
@@ -208,7 +233,7 @@ def download_prices(
 
     # Caso 2: no hay caché válido -> descarga completa.
     if cached is None:
-        prices = _download_yf(tickers, start=None, period=period)
+        prices = _download_yf(tickers, start=full_start_str, end=end_str)
         prices = prices.dropna(how="any")
         prices.to_csv(_CACHE_PATH)
         return prices
@@ -220,7 +245,7 @@ def download_prices(
     new_tickers = sorted(requested_tickers - cached_tickers)
 
     if new_tickers:
-        new_data = _download_yf(new_tickers, start=None, period=period)
+        new_data = _download_yf(new_tickers, start=full_start_str, end=end_str)
         if not new_data.empty:
             # Unión por columnas; el outer join puede generar NaN al inicio si
             # los nuevos tickers tienen historia más corta. Se limpian al final.
@@ -228,17 +253,16 @@ def download_prices(
 
     # 3b: días faltantes hasta hoy.
     last_date = cached.index.max().date()
-    today = date.today()
     days_behind = (today - last_date).days
 
     # Yahoo cierra fines de semana y feriados; aceptamos hasta 1 día de delay
     # como "actualizado" para no descargar de más en weekends.
     if days_behind > 1:
-        # Pedir desde el día siguiente al último cacheado.
-        start = (last_date + timedelta(days=1)).isoformat()
+        # Pedir desde el día siguiente al último cacheado hasta hoy inclusive.
+        start_str = (last_date + timedelta(days=1)).isoformat()
         # Para la actualización pedimos todos los tickers actuales así también
         # extendemos las series de los nuevos.
-        update = _download_yf(tickers, start=start, period=None)
+        update = _download_yf(tickers, start=start_str, end=end_str)
         if not update.empty:
             # Concatenar y deduplicar por índice (por si yfinance devuelve
             # solapamiento con la última fila de la caché).
