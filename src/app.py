@@ -78,7 +78,8 @@ try:
         
         # Uso del módulo KKT
         df_kkt = active_constraints_table(weights, {})
-        st.dataframe(df_kkt, use_container_width=True)
+        # Código corregido
+        st.dataframe(df_kkt, width='stretch')
         
         st.info("Los multiplicadores KKT completos se calculan en consola mediante `kkt_analysis.py`.")
 
