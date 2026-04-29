@@ -145,7 +145,10 @@ def _download_yf(tickers: list[str], start: str, end: str | None = None) -> pd.D
         if "Close" not in raw.columns.get_level_values(0):
             warnings.warn("La descarga no contiene la columna 'Close'.")
             return pd.DataFrame()
+        # Bajo MultiIndex, raw["Close"] siempre devuelve un DataFrame; el assert
+        # estrecha el tipo para Pylance y falla rápido si yfinance cambia de forma.
         prices = raw["Close"].copy()
+        assert isinstance(prices, pd.DataFrame)
     else:
         if "Close" not in raw.columns:
             warnings.warn("La descarga no contiene la columna 'Close'.")
@@ -172,7 +175,7 @@ def _read_cache() -> pd.DataFrame | None:
         return None
     try:
         df = pd.read_csv(_CACHE_PATH, index_col=0, parse_dates=True)
-        if df.empty or df.index.isna().any():
+        if df.empty or df.index.hasnans:
             raise ValueError("Caché vacía o con índice inválido")
         return df.sort_index()
     except Exception as exc:
