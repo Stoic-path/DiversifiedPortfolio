@@ -40,7 +40,10 @@ stocks:
   - CVX     # Chevron
 
 # -----------------------------------------------------------------------------
-# Criptomonedas (top 10 por capitalización de mercado).
+# Criptomonedas relevantes con al menos 5 años de historial diario en Yahoo
+# Finance. Se priorizan top capitalización; LTC entra por historia larga y
+# perfil económico estable como sustituto de MATIC (delisted tras la migración
+# Polygon -> POL en 2024).
 # Cotizan los 7 días de la semana, por eso al cruzarlas con stocks se pierden
 # fines de semana al hacer el inner join por fecha.
 # -----------------------------------------------------------------------------
@@ -53,7 +56,7 @@ cryptos:
   - ADA-USD    # Cardano
   - AVAX-USD   # Avalanche
   - DOT-USD    # Polkadot
-  - MATIC-USD  # Polygon
+  - LTC-USD    # Litecoin (reemplaza a MATIC-USD: Polygon migró su token a POL en 2024)
   - LINK-USD   # Chainlink
 
 # -----------------------------------------------------------------------------
