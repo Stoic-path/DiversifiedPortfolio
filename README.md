@@ -10,7 +10,7 @@ Este proyecto implementa el modelo clásico de Markowitz extendido con selecció
 
 - **Universo de selección amplio** distribuido en 3 clases:
   - Acciones: ~15 empresas del S&P 500 de distintos sectores.
-  - Criptomonedas: top 10 por capitalización de mercado.
+  - Criptomonedas: top 10 por capitalización de mercado, mínimo con 5 años de legitimidad.
   - Commodities: ETFs de oro, plata, petróleo, gas, agricultura y cobre.
 - **Selección automática**: el optimizador decide qué activos entran al portafolio (algunos quedarán con peso 0).
 - **Restricciones por clase**: criptomonedas ≤ 33%, commodities ≤ 33%.

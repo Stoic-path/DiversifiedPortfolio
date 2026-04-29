@@ -52,8 +52,12 @@ El optimizador decide cuáles entran al portafolio óptimo desde este universo:
 - Consumo: AMZN, WMT, KO, PG
 - Energía: XOM, CVX
 
-**Criptomonedas (top 10 por capitalización):**
-BTC-USD, ETH-USD, SOL-USD, BNB-USD, XRP-USD, ADA-USD, AVAX-USD, DOT-USD, MATIC-USD, LINK-USD
+**Criptomonedas (top capitalización con >= 5 años de historial diario):**
+BTC-USD, ETH-USD, SOL-USD, BNB-USD, XRP-USD, ADA-USD, AVAX-USD, DOT-USD, LTC-USD, LINK-USD
+
+> Nota: LTC-USD reemplaza a MATIC-USD desde abril 2026, dado que Polygon
+> migró su token nativo a POL en 2024 y MATIC-USD dejó de actualizarse en
+> Yahoo Finance.
 
 **Commodities (ETFs disponibles en Yahoo Finance):**
 GLD (oro), SLV (plata), USO (petróleo), UNG (gas natural), DBA (agricultura), CPER (cobre)
