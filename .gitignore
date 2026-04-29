@@ -54,3 +54,6 @@ $RECYCLE.BIN/
 *.log
 *.tmp
 *.bak
+
+# ===== Archivos locales del proyecto =====
+/CLAUDE.md
