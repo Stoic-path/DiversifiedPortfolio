@@ -1,0 +1,7 @@
+#,Restricción,Expresión,Multiplicador,Valor numérico,¿Activa?,Lectura económica
+1,Retorno mínimo,μᵀw ≥ r_obj,λ_return,0.030063,Sí,"Costo marginal en varianza por pedir 1 pp adicional de retorno. Si está activa, exigir más rentabilidad obliga a aceptar más riesgo."
+2,Presupuesto total,Σ wᵢ = 1,ν_budget,-0.018225,Sí (igualdad),Precio sombra del capital invertido. Cambiar el presupuesto de 1 a 1+ε desplaza la varianza óptima en ν_budget·ε.
+3,No-negatividad,wᵢ ≥ 0,λ_nonneg (vector),19 de 33 activos con λ>0  (máx = 0.027002),Sí,Cada activo con peso 0 tiene un λ que mide cuánto bajaría la varianza si se permitiera venderlo en corto.
+4,Tope criptomonedas,Σ_{i∈C} wᵢ ≤ 0.33,λ_crypto,0.000000,No,"Si λ_crypto > 0, el optimizador querría > 33% en cripto. El valor mide la mejora marginal de varianza por cada 1 pp de relajación de la cuota."
+5,Tope commodities,Σ_{i∈M} wᵢ ≤ 0.33,λ_commodity,0.010662,Sí,"Si λ_commodity > 0, el portafolio está limitado por la cuota de commodities; cuantifica la reducción de varianza alcanzable al aflojarla."
+6,Tope individual,wᵢ ≤ 0.25,λ_max (vector),0 de 33 activos con λ>0  (máx = 0.000000),No,Cada activo pegado al tope del 25% tiene un λ_max que mide cuánto bajaría la varianza si se le permitiera concentrarse más allá del límite.
